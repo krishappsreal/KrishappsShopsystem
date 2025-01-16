@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>*KRISHAPPS SHOPSYSTEM*</title>
+    <style>
+        /* Alap stílusok */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 60%;
+            max-width: 600px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            padding: 15px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 80%;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 18px;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 5px;
+        }
+
+        button#addButton {
+            background-color: #007bff;
+        }
+
+        button#addButton:hover {
+            background-color: #0056b3;
+        }
+
+        button#calculateButton {
+            background-color: #ff9800;
+        }
+
+        button#calculateButton:hover {
+            background-color: #f57c00;
+        }
+
+        button.deleteButton {
+            background-color: red;
+        }
+
+        button.deleteButton:hover {
+            background-color: #a00;
+        }
+
+        button#nameButton {
+            background-color: #6c757d;
+        }
+
+        button#nameButton:hover {
+            background-color: #5a6268;
+        }
+
+        button#printButton {
+            background-color: #28a745;
+        }
+
+        button#printButton:hover {
+            background-color: #218838;
+        }
+
+        button#restartButton {
+            background-color: #ff9800;
+        }
+
+        button#restartButton:hover {
+            background-color: #f57c00;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .big-text {
+            font-size: 100px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+
+        .number-list {
+            text-align: left;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+
+        .number-item {
+            font-size: 18px;
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .name-input {
+            margin-left: 10px;
+            display: inline-block;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 80%;
+            margin-bottom: 20px;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: #555;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="title">Add meg a termékek árát!</h1>
+        <div id="input-section">
+            <input type="number" id="inputNumber" placeholder="Adj hozzá egy számot..." onkeypress="checkEnter(event)">
+            <input type="text" id="inputName" placeholder="Termék neve (opcionális)">
+            <br>
+            <button id="addButton" onclick="addNumber()">Hozzáadás</button>
+            <button id="calculateButton" onclick="calculateTotal()">Kiszámolás</button>
+            <div class="number-list" id="numberList"></div>
+        </div>
+
+        <div id="output-section" class="hidden">
+            <p id="outputText" class="big-text"></p>
+            <img id="qrCode" class="hidden" alt="QR Code">
+            <div class="footer-text hidden" id="footerText">
+                KÉSZÍTVE A KRISHAPPS SHOPSYSTEM ÁLTAL<br>
+                NAV ELLENŐRZŐ KÓD: KS822<br>
+                AP: A08220123
+            </div>
+            <select id="paymentMethod" class="hidden" onchange="showButtons()">
+                <option value="">Válassz fizetési módot</option>
+                <option value="Vásárlói/Ajándékkártya">Vásárlói/Ajándékkártya</option>
+                <option value="Készpénz">Készpénz</option>
+                <option value="Bankkártya">Bankkártya</option>
+            </select>
+            <button id="printButton" class="hidden" onclick="printText()">Nyomtatás</button>
+            <button id="restartButton" class="hidden" onclick="restartPage()">Újra</button>
+        </div>
+    </div>
+
+    <script>
+        let items = [];
+
+        function addNumber() {
+            const number = parseFloat(document.getElementById("inputNumber").value);
+            const name = document.getElementById("inputName").value || "ÁRU";
+
+            if (!isNaN(number)) {
+                items.push({ name, number });
+
+                const numberItem = document.createElement("div");
+                numberItem.classList.add("number-item");
+                numberItem.innerText = `${name} (${number} Ft)`;
+
+                const deleteButton = document.createElement("button");
+                deleteButton.innerText = "-";
+                deleteButton.classList.add("deleteButton");
+                deleteButton.onclick = function () {
+                    removeItem(number, numberItem);
+                };
+
+                numberItem.appendChild(deleteButton);
+                document.getElementById("numberList").appendChild(numberItem);
+
+                document.getElementById("inputNumber").value = '';
+                document.getElementById("inputName").value = '';
+            }
+        }
+
+        function removeItem(number, element) {
+            items = items.filter(item => item.number !== number);
+            element.remove();
+        }
+
+        function checkEnter(event) {
+            if (event.key === "Enter") {
+                addNumber();
+                event.preventDefault();
+            }
+        }
+
+        function calculateTotal() {
+            if (items.length > 0) {
+                const total = items.reduce((sum, item) => sum + item.number, 0);
+                document.getElementById("outputText").innerText = `Végösszeg: ${total} Ft`;
+                document.getElementById("title").classList.add("hidden");
+
+                document.getElementById("input-section").classList.add("hidden");
+                document.getElementById("output-section").classList.remove("hidden");
+
+                const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?data=Vegosszeg=${total}&size=150x150`;
+                const qrCodeImage = document.getElementById("qrCode");
+                qrCodeImage.src = qrCodeURL;
+                qrCodeImage.classList.remove("hidden");
+
+                document.getElementById("footerText").classList.remove("hidden");
+                setTimeout(() => {
+                    document.getElementById("paymentMethod").classList.remove("hidden");
+                }, 1000);
+            } else {
+                alert("Kérlek, adj hozzá legalább egy terméket!");
+            }
+        }
+
+        function showButtons() {
+            setTimeout(() => {
+                document.getElementById("printButton").classList.remove("hidden");
+                document.getElementById("restartButton").classList.remove("hidden");
+            }, 1000);
+        }
+
+        function restartPage() {
+            location.reload();
+        }
+
+        function printText() {
+            const paymentMethod = document.getElementById("paymentMethod").value;
+            const printWindow = window.open("", "_blank", "width=600,height=400");
+            printWindow.document.write('<html><head><title>Nyomtatás</title></head><body>');
+            printWindow.document.write('<p style="font-family: Arial; font-size: 48px; text-align: center; color: darkblue; font-weight: bold;">KRISHAPPS SHOP</p>');
+            printWindow.document.write(`<p style="font-family: Arial; font-size: 48px; text-align: center; color: darkblue; font-weight: bold;">Fizetési mód: ${paymentMethod}</p>`);
+            printWindow.document.write('<ul style="font-family: Arial; font-size: 24px; color: darkblue; list-style-type: none; padding: 0; text-align: center;">');
+
+            items.forEach(item => {
+                printWindow.document.write(`<li>${item.name} (${item.number} Ft)</li>`);
+            });
+
+            const total = items.reduce((sum, item) => sum + item.number, 0);
+            printWindow.document.write(`<p style="font-family: Arial; font-size: 48px; text-align: center; color: darkblue; font-weight: bold;">VÉGÖSSZEG: ${total} Ft</p>`);
+            const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?data=Vegosszeg=${total}&size=150x150`;
+            printWindow.document.write(`<img src="${qrCodeURL}" alt="QR Code" style="display: block; margin: 20px auto;">`);
+            printWindow.document.write('<p style="font-family: Arial; font-size: 12px; text-align: center; color: darkblue;">KÉSZÍTVE A KRISHAPPS SHOPSYSTEM ÁLTAL<br>NAV ELLENŐRZŐ KÓD: KS822<br>AP: A08220123</p>');
+            printWindow.document.write('</ul></body></html>');
+            printWindow.document.close();
+            setTimeout(() => printWindow.print(), 1000);
+        }
+    </script>
+</body>
+</html>
