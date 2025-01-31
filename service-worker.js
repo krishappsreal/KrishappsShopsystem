@@ -3,7 +3,7 @@ const ASSETS = [
     '/',
     '/index.html',
     '/styles.css',
-    '/favicon.ico',
+    '/favicon (2).ico',
     // További fájlok, pl. képek, stb.
 ];
 
