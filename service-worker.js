@@ -1,9 +1,9 @@
-const CACHE_NAME = 'krishapps-shopsystem-v1';
+const CACHE_NAME = 'KrishappsShopsystem';
 const ASSETS = [
     '/',
     '/index.html',
     '/styles.css',
-    '/favicon (2).ico',
+    '/favicon.ico',
     // További fájlok, pl. képek, stb.
 ];
 
