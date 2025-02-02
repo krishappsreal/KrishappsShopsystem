@@ -1,4 +1,5 @@
-const CACHE_NAME = 'KrishappsShopsystem';
+importScripts("https://progressier.app/PyNzJwKC4bFKTngyYc82/sw.js" );
+const CACHE_NAME = 'Krishapps-Shopsystem-v1';
 const ASSETS = [
     '/',
     '/index.html',
