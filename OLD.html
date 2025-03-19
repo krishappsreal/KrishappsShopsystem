@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
+    <link rel="manifest" href="https://progressier.app/PyNzJwKC4bFKTngyYc82/progressier.json"/><script defer src="https://progressier.app/PyNzJwKC4bFKTngyYc82/script.js"></script> 
     <link rel="shortcut icon" href="/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +16,12 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #ffffff;
         }
 
         .container {
@@ -25,6 +32,12 @@
             text-align: center;
             width: 60%;
             max-width: 600px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode .container {
+            background-color: #333;
+            color: #ffffff;
         }
 
         h1 {
@@ -32,8 +45,13 @@
             margin-bottom: 20px;
         }
 
+        body.dark-mode h1 {
+            color: #ffffff;
+        }
+
         input[type="number"],
-        input[type="text"] {
+        input[type="text"],
+        select {
             padding: 15px;
             font-size: 18px;
             border: 1px solid #ccc;
@@ -41,6 +59,15 @@
             width: 80%;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode input[type="number"],
+        body.dark-mode input[type="text"],
+        body.dark-mode select {
+            background-color: #444;
+            color: #ffffff;
+            border-color: #666;
         }
 
         button {
@@ -78,14 +105,6 @@
             background-color: #a00;
         }
 
-        button#nameButton {
-            background-color: #6c757d;
-        }
-
-        button#nameButton:hover {
-            background-color: #5a6268;
-        }
-
         button#printButton {
             background-color: #28a745;
         }
@@ -113,12 +132,21 @@
             margin: 20px 0;
         }
 
+        body.dark-mode .big-text {
+            color: #ffffff;
+        }
+
         .number-list {
             text-align: left;
             margin: 20px 0;
             padding: 10px;
             background-color: #e9ecef;
             border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode .number-list {
+            background-color: #444;
         }
 
         .number-item {
@@ -131,20 +159,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        .name-input {
-            margin-left: 10px;
-            display: inline-block;
-        }
-
-        select {
-            padding: 10px;
-            font-size: 18px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 80%;
-            margin-bottom: 20px;
+        body.dark-mode .number-item {
+            background-color: #555;
+            color: #ffffff;
         }
 
         .footer-text {
@@ -153,14 +173,40 @@
             margin-top: 20px;
             text-align: center;
         }
+
+        body.dark-mode .footer-text {
+            color: #ccc;
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        body.dark-mode .dark-mode-toggle {
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
+    <button class="dark-mode-toggle" id="darkModeToggle">🌙</button>
     <div class="container">
         <h1 id="title">Add meg a termékek árát!</h1>
         <div id="input-section">
             <input type="number" id="inputNumber" placeholder="Adj hozzá egy számot..." onkeypress="checkEnter(event)">
             <input type="text" id="inputName" placeholder="Termék neve (opcionális)">
+            <input type="number" id="inputQuantity" placeholder="Darabszám (alapértelmezett: 1)" value="1" min="1">
+            <select id="currencySelector">
+                <option value="HUF">HUF</option>
+                <option value="EUR">EUR</option>
+                <option value="USD">USD</option>
+            </select>
             <br>
             <button id="addButton" onclick="addNumber()">Hozzáadás</button>
             <button id="calculateButton" onclick="calculateTotal()">Kiszámolás</button>
@@ -169,6 +215,8 @@
 
         <div id="output-section" class="hidden">
             <p id="outputText" class="big-text"></p>
+            <p id="convertedText"></p>
+            <p id="vatText"></p>
             <img id="qrCode" class="hidden" alt="QR Code">
             <div class="footer-text hidden" id="footerText">
                 KÉSZÍTVE A KRISHAPPS SHOPSYSTEM ÁLTAL<br>
@@ -188,17 +236,36 @@
 
     <script>
         let items = [];
+        let exchangeRates = { EUR: 400, USD: 370 }; // Példa árfolyamok (1 EUR = 400 HUF, 1 USD = 370 HUF)
+        let darkMode = localStorage.getItem('darkMode') === 'true';
+
+        // Sötét mód beállítása
+        function setDarkMode(isDark) {
+            darkMode = isDark;
+            localStorage.setItem('darkMode', darkMode);
+            document.body.classList.toggle('dark-mode', darkMode);
+            document.getElementById('darkModeToggle').innerText = darkMode ? '☀️' : '🌙';
+        }
+
+        // Sötét mód váltó
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            setDarkMode(!darkMode);
+        });
+
+        // Oldal betöltésekor sötét mód visszaállítása
+        setDarkMode(darkMode);
 
         function addNumber() {
             const number = parseFloat(document.getElementById("inputNumber").value);
             const name = document.getElementById("inputName").value || "ÁRU";
+            const quantity = parseInt(document.getElementById("inputQuantity").value) || 1;
 
             if (!isNaN(number)) {
-                items.push({ name, number });
+                items.push({ name, number, quantity });
 
                 const numberItem = document.createElement("div");
                 numberItem.classList.add("number-item");
-                numberItem.innerText = `${name} (${number} Ft)`;
+                numberItem.innerText = `${name} (${number} Ft x ${quantity} db)`;
 
                 const deleteButton = document.createElement("button");
                 deleteButton.innerText = "-";
@@ -212,6 +279,7 @@
 
                 document.getElementById("inputNumber").value = '';
                 document.getElementById("inputName").value = '';
+                document.getElementById("inputQuantity").value = 1;
             }
         }
 
@@ -229,14 +297,42 @@
 
         function calculateTotal() {
             if (items.length > 0) {
-                const total = items.reduce((sum, item) => sum + item.number, 0);
-                document.getElementById("outputText").innerText = `Végösszeg: ${total} Ft`;
-                document.getElementById("title").classList.add("hidden");
+                const totalHUF = items.reduce((sum, item) => sum + item.number * item.quantity, 0);
+                const currency = document.getElementById("currencySelector").value;
+                let totalConverted = totalHUF;
 
+                if (currency === "EUR") {
+                    totalConverted = (totalHUF / exchangeRates.EUR).toFixed(2);
+                } else if (currency === "USD") {
+                    totalConverted = (totalHUF / exchangeRates.USD).toFixed(2);
+                }
+
+                document.getElementById("outputText").innerText = `Végösszeg: ${totalConverted} ${currency}`;
+
+                // Átváltott összegek dinamikusan
+                const totalEUR = (totalHUF / exchangeRates.EUR).toFixed(2);
+                const totalUSD = (totalHUF / exchangeRates.USD).toFixed(2);
+
+                let convertedText = "";
+                if (currency === "HUF") {
+                    convertedText = `Dollárban: ${totalUSD} USD, Euróban: ${totalEUR} EUR`;
+                } else if (currency === "EUR") {
+                    convertedText = `Forintban: ${totalHUF} Ft, Dollárban: ${totalUSD} USD`;
+                } else if (currency === "USD") {
+                    convertedText = `Forintban: ${totalHUF} Ft, Euróban: ${totalEUR} EUR`;
+                }
+
+                document.getElementById("convertedText").innerText = convertedText;
+
+                // ÁFA nélküli összeg
+                const totalWithoutVAT = (totalHUF * 0.73).toFixed(2);
+                document.getElementById("vatText").innerText = `Áfa nélkül: (-27%) ${totalWithoutVAT} Ft`;
+
+                document.getElementById("title").classList.add("hidden");
                 document.getElementById("input-section").classList.add("hidden");
                 document.getElementById("output-section").classList.remove("hidden");
 
-                const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?data=Vegosszeg=${total}&size=150x150`;
+                const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?data=Vegosszeg=${totalHUF}&size=150x150`;
                 const qrCodeImage = document.getElementById("qrCode");
                 qrCodeImage.src = qrCodeURL;
                 qrCodeImage.classList.remove("hidden");
@@ -270,17 +366,45 @@
             printWindow.document.write('<ul style="font-family: Arial; font-size: 24px; color: darkblue; list-style-type: none; padding: 0; text-align: center;">');
 
             items.forEach(item => {
-                printWindow.document.write(`<li>${item.name} (${item.number} Ft)</li>`);
+                printWindow.document.write(`<li>${item.name} (${item.number} Ft x ${item.quantity} db)</li>`);
             });
 
-            const total = items.reduce((sum, item) => sum + item.number, 0);
-            printWindow.document.write(`<p style="font-family: Arial; font-size: 48px; text-align: center; color: darkblue; font-weight: bold;">VÉGÖSSZEG: ${total} Ft</p>`);
-            const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?data=Vegosszeg=${total}&size=150x150`;
+            const totalHUF = items.reduce((sum, item) => sum + item.number * item.quantity, 0);
+            const currency = document.getElementById("currencySelector").value;
+            let totalConverted = totalHUF;
+
+            if (currency === "EUR") {
+                totalConverted = (totalHUF / exchangeRates.EUR).toFixed(2);
+            } else if (currency === "USD") {
+                totalConverted = (totalHUF / exchangeRates.USD).toFixed(2);
+            }
+
+            printWindow.document.write(`<p style="font-family: Arial; font-size: 48px; text-align: center; color: darkblue; font-weight: bold;">VÉGÖSSZEG: ${totalConverted} ${currency}</p>`);
+            const totalEUR = (totalHUF / exchangeRates.EUR).toFixed(2);
+            const totalUSD = (totalHUF / exchangeRates.USD).toFixed(2);
+            printWindow.document.write(`<p style="font-family: Arial; font-size: 24px; text-align: center; color: darkblue;">Dollárban: ${totalUSD} USD, Euróban: ${totalEUR} EUR</p>`);
+            const totalWithoutVAT = (totalHUF * 0.73).toFixed(2);
+            printWindow.document.write(`<p style="font-family: Arial; font-size: 24px; text-align: center; color: darkblue;">Áfa nélkül: (-27%) ${totalWithoutVAT} Ft</p>`);
+
+            const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?data=Vegosszeg=${totalHUF}&size=150x150`;
             printWindow.document.write(`<img src="${qrCodeURL}" alt="QR Code" style="display: block; margin: 20px auto;">`);
             printWindow.document.write('<p style="font-family: Arial; font-size: 12px; text-align: center; color: darkblue;">KÉSZÍTVE A KRISHAPPS SHOPSYSTEM ÁLTAL<br>NAV ELLENŐRZŐ KÓD: KS822<br>AP: A08220123</p>');
             printWindow.document.write('</ul></body></html>');
             printWindow.document.close();
             setTimeout(() => printWindow.print(), 1000);
+        }
+    </script>
+
+    <script>
+        // Service Worker regisztrálása
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then((registration) => {
+                    console.log('Service Worker regisztrálva:', registration);
+                })
+                .catch((error) => {
+                    console.error('Service Worker regisztráció sikertelen:', error);
+                });
         }
     </script>
 </body>
