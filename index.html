@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-    <link rel="manifest" href="https://progressier.app/PyNzJwKC4bFKTngyYc82/progressier.json"/><script defer src="https://progressier.app/PyNzJwKC4bFKTngyYc82/script.js"></script> 
+    <link rel="manifest" href="https://progressier.app/PyNzJwKC4bFKTngyYc82/progressier.json"/>
+    <script defer src="https://progressier.app/PyNzJwKC4bFKTngyYc82/script.js"></script>
     <link rel="shortcut icon" href="/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -192,6 +193,21 @@
         body.dark-mode .dark-mode-toggle {
             color: #ffffff;
         }
+
+        .data-matrix-placeholder {
+            background-color: #e9ecef;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 18px;
+            color: #555;
+            margin: 20px 0;
+        }
+
+        body.dark-mode .data-matrix-placeholder {
+            background-color: #444;
+            color: #ccc;
+        }
     </style>
 </head>
 <body>
@@ -217,13 +233,16 @@
             <p id="outputText" class="big-text"></p>
             <p id="convertedText"></p>
             <p id="vatText"></p>
-            <img id="qrCode" class="hidden" alt="QR Code">
+            <div id="dataMatrixPlaceholder" class="data-matrix-placeholder">
+                Válaszd ki a fizetési módot, és a PDF417 vonalkód meg fog jelenni.
+            </div>
+            <img id="dataMatrix" class="hidden" alt="PDF417 vonalkód">
             <div class="footer-text hidden" id="footerText">
                 KÉSZÍTVE A KRISHAPPS SHOPSYSTEM ÁLTAL<br>
                 NAV ELLENŐRZŐ KÓD: KS822<br>
                 AP: A08220123
             </div>
-            <select id="paymentMethod" class="hidden" onchange="showButtons()">
+            <select id="paymentMethod" class="hidden" onchange="updateDataMatrix()">
                 <option value="">Válassz fizetési módot</option>
                 <option value="Vásárlói/Ajándékkártya">Vásárlói/Ajándékkártya</option>
                 <option value="Készpénz">Készpénz</option>
@@ -332,25 +351,46 @@
                 document.getElementById("input-section").classList.add("hidden");
                 document.getElementById("output-section").classList.remove("hidden");
 
-                const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?data=Vegosszeg=${totalHUF}&size=150x150`;
-                const qrCodeImage = document.getElementById("qrCode");
-                qrCodeImage.src = qrCodeURL;
-                qrCodeImage.classList.remove("hidden");
-
-                document.getElementById("footerText").classList.remove("hidden");
-                setTimeout(() => {
-                    document.getElementById("paymentMethod").classList.remove("hidden");
-                }, 1000);
+                // Fizetési mód választó és gombok megjelenítése
+                document.getElementById("paymentMethod").classList.remove("hidden");
+                updateDataMatrix(); // Automatikusan frissíti a vonalkódot
             } else {
                 alert("Kérlek, adj hozzá legalább egy terméket!");
             }
         }
 
-        function showButtons() {
-            setTimeout(() => {
-                document.getElementById("printButton").classList.remove("hidden");
-                document.getElementById("restartButton").classList.remove("hidden");
-            }, 1000);
+        function updateDataMatrix() {
+            const paymentMethod = document.getElementById("paymentMethod").value;
+            const printButton = document.getElementById("printButton");
+            const restartButton = document.getElementById("restartButton");
+
+            if (paymentMethod) {
+                let paymentShort = "";
+                if (paymentMethod === "Készpénz") {
+                    paymentShort = "kp";
+                } else if (paymentMethod === "Bankkártya") {
+                    paymentShort = "bk";
+                } else if (paymentMethod === "Vásárlói/Ajándékkártya") {
+                    paymentShort = "va";
+                }
+
+                const totalHUF = items.reduce((sum, item) => sum + item.number * item.quantity, 0);
+                const dataMatrixURL = `http://bwipjs-api.metafloor.com/?bcid=pdf417&text=https://v-s.krishapps.com/?q=${totalHUF}-${paymentShort}`;
+                const dataMatrixImage = document.getElementById("dataMatrix");
+                dataMatrixImage.src = dataMatrixURL;
+                dataMatrixImage.classList.remove("hidden");
+                document.getElementById("dataMatrixPlaceholder").classList.add("hidden");
+
+                // Gombok megjelenítése, ha a fizetési mód érvényes
+                printButton.classList.remove("hidden");
+                restartButton.classList.remove("hidden");
+            } else {
+                // Ha nincs fizetési mód kiválasztva, rejtsd el a gombokat
+                printButton.classList.add("hidden");
+                restartButton.classList.add("hidden");
+                document.getElementById("dataMatrix").classList.add("hidden");
+                document.getElementById("dataMatrixPlaceholder").classList.remove("hidden");
+            }
         }
 
         function restartPage() {
@@ -386,25 +426,12 @@
             const totalWithoutVAT = (totalHUF * 0.73).toFixed(2);
             printWindow.document.write(`<p style="font-family: Arial; font-size: 24px; text-align: center; color: darkblue;">Áfa nélkül: (-27%) ${totalWithoutVAT} Ft</p>`);
 
-            const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?data=Vegosszeg=${totalHUF}&size=150x150`;
-            printWindow.document.write(`<img src="${qrCodeURL}" alt="QR Code" style="display: block; margin: 20px auto;">`);
+            const dataMatrixURL = `http://bwipjs-api.metafloor.com/?bcid=pdf417&text=https://v-s.krishapps.com/?q=${totalHUF}-${paymentMethod === "Készpénz" ? "kp" : paymentMethod === "Bankkártya" ? "bk" : "va"}`;
+            printWindow.document.write(`<img src="${dataMatrixURL}" alt="PDF417 vonalkód" style="display: block; margin: 20px auto;">`);
             printWindow.document.write('<p style="font-family: Arial; font-size: 12px; text-align: center; color: darkblue;">KÉSZÍTVE A KRISHAPPS SHOPSYSTEM ÁLTAL<br>NAV ELLENŐRZŐ KÓD: KS822<br>AP: A08220123</p>');
             printWindow.document.write('</ul></body></html>');
             printWindow.document.close();
             setTimeout(() => printWindow.print(), 1000);
-        }
-    </script>
-
-    <script>
-        // Service Worker regisztrálása
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js')
-                .then((registration) => {
-                    console.log('Service Worker regisztrálva:', registration);
-                })
-                .catch((error) => {
-                    console.error('Service Worker regisztráció sikertelen:', error);
-                });
         }
     </script>
 </body>
