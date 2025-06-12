@@ -14,13 +14,33 @@
                     type: 'Extrait De Parfum',
                     price: '99,990 Ft'
                 },
-
                 {
                     image: 'https://img.kwcdn.com/product/fancy/2de80411-5368-479d-a4c0-33c245eaff40.jpg?imageView2/2/w/800/q/70/format/webp',
                     brand: 'Krishapps',
                     name: 'Be Cool 50ml',
                     type: 'Parfüm',
                     price: '38,500 Ft'
+                },
+                {
+                    image: 'https://img.ltwebstatic.com/images3_spmp/2024/07/15/cd/17210287142fa837baed62cc97ef355d7136b60522_thumbnail_900x.webp',
+                    brand: 'Krishapps & Louis Vuitton',
+                    name: 'Summer Potion 50ml',
+                    type: 'Eau de Parfum',
+                    price: '65,860 Ft'
+                },
+                {
+                    image: 'https://img.ltwebstatic.com/images3_spmp/2024/10/16/29/1729071098bc6aa8e3dc5285678735406c1e5bbe20_thumbnail_900x.webp',
+                    brand: 'Krishapps & Maison Francis Kurkdijan',
+                    name: 'Winterbomb 50ml',
+                    type: 'Parfüm kivonat',
+                    price: '78,990 Ft'
+                },
+                {
+                    image: 'https://img.ltwebstatic.com/v4/j/spmp/2025/04/24/f8/1745476142079854b601e80e7f67f4f98562d90a5f_thumbnail_900x.webp',
+                    brand: 'Krishapps',
+                    name: 'Grand Vanille 10ml',
+                    type: 'Parfüm',
+                    price: '18,270 Ft'
                 },
                 {
                     image: 'https://fimgs.net/photogram/p1200/cr/r8/eeW3r8DBhhTroMHO.jpg',
