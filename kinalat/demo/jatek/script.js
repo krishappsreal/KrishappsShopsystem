@@ -37,10 +37,10 @@
                 },
                 {
                     image: 'https://img.ltwebstatic.com/v4/j/spmp/2025/04/24/f8/1745476142079854b601e80e7f67f4f98562d90a5f_thumbnail_900x.webp',
-                    brand: 'Krishapps',
-                    name: 'Grand Vanille 10ml',
-                    type: 'Parfüm',
-                    price: '18,270 Ft'
+                    brand: 'választható márka',
+                    name: 'A te minid - Választható parfümminták 10ml',
+                    type: 'Válaszd ki, hogy melyik parfümünkből szeretnél 10ml-t, és mi megcsináljuk neked!',
+                    price: 'változó ár'
                 },
                 {
                     image: 'https://fimgs.net/photogram/p1200/cr/r8/eeW3r8DBhhTroMHO.jpg',
