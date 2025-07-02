@@ -57,6 +57,13 @@
                     price: '48,450 Ft'
                 },
                 {
+                    image: 'https://fimgs.net/photogram/p1200/fy/nd/j8xP7vFQayc8pt5S.jpg',
+                    brand: 'Chanel',
+                    name: 'Allure Homme Sport 100ml',
+                    type: 'Eau de Toilette',
+                    price: '94,550 Ft'
+                },
+                {
                     image: 'https://fimgs.net/photogram/p1200/ze/ub/LO2Jy5kkeuiGDbbt.jpg',
                     brand: 'Jean Paul Gaultier',
                     name: '... Paradise Garden 75ml',
