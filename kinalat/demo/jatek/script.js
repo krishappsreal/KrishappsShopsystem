@@ -99,7 +99,7 @@
                     price: '43,900 Ft'
                 },
                 {
-                    image: 'https://fimgs.net/photogram/p1200/6j/bx/08oM6sna0Lq9emwZ.jpg',
+                    image: 'https://fimgs.net/photogram/p1200/4z/k5/1a0fubcsWmL2FPL5.jpg',
                     brand: 'Gisada',
                     name: 'Ambassador 100ml',
                     type: 'Eau de Parfum',
