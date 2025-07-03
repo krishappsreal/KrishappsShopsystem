@@ -100,6 +100,13 @@
                 },
                 {
                     image: 'https://fimgs.net/photogram/p1200/6j/bx/08oM6sna0Lq9emwZ.jpg',
+                    brand: 'Gisada',
+                    name: 'Ambassador 100ml',
+                    type: 'Eau de Parfum',
+                    price: '49,990 Ft'
+                },
+                {
+                    image: 'https://fimgs.net/photogram/p1200/6j/bx/08oM6sna0Lq9emwZ.jpg',
                     brand: 'Guerlain',
                     name: 'LˇHomme Ideál Extreme 100ml',
                     type: 'Eau de Parfum',
