@@ -43,6 +43,13 @@
                     price: 'változó ár'
                 },
                 {
+                    image: 'https://fimgs.net/photogram/p1200/nf/1u/PsqxySUemmsTjBEM.jpg',
+                    brand: 'Xerjoff',
+                    name: 'Erba Pura 100ml',
+                    type: 'Eau de Parfum',
+                    price: '110,520 Ft'
+                },
+                {
                     image: 'https://fimgs.net/photogram/p1200/cr/r8/eeW3r8DBhhTroMHO.jpg',
                     brand: 'Móntale',
                     name: 'Soleil De Capri 100ml',
