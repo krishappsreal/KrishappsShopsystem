@@ -106,6 +106,13 @@
                     price: '45,000 Ft'
                 },
                 {
+                    image: 'https://fimgs.net/photogram/p1200/u7/90/8H5J4MwH6VtSaZiY.jpg',
+                    brand: 'Valentino',
+                    name: 'Born In Roma Intense',
+                    type: 'Eau de Parfum',
+                    price: '56,990 Ft'
+                },
+                {
                     image: 'https://fimgs.net/photogram/p1200/4z/k5/1a0fubcsWmL2FPL5.jpg',
                     brand: 'Gisada',
                     name: 'Ambassador 100ml',
