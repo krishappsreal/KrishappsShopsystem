@@ -73,7 +73,7 @@
                 {
                     image: 'https://fimgs.net/photogram/p1200/ze/ub/LO2Jy5kkeuiGDbbt.jpg',
                     brand: 'Jean Paul Gaultier',
-                    name: '... Paradise Garden 75ml',
+                    name: 'Le Beau Paradise Garden 75ml',
                     type: 'Eau de Parfum',
                     price: '42,670 Ft'
                 },
@@ -108,7 +108,7 @@
                 {
                     image: 'https://fimgs.net/photogram/p1200/u7/90/8H5J4MwH6VtSaZiY.jpg',
                     brand: 'Valentino',
-                    name: 'Born In Roma Intense',
+                    name: 'Born In Roma Intense 100ml',
                     type: 'Eau de Parfum',
                     price: '56,990 Ft'
                 },
