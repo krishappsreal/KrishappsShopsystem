@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Hero Slider</title>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ===== HERO SLIDER ===== */
+.hero-slider {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  max-height: 520px;
+  min-height: 320px;
+  overflow: hidden;
+}
+
+/* Mobil optimalizálás */
+@media (max-width: 768px) {
+  .hero-slider {
+    height: 60vh;
+    min-height: 260px;
+    max-height: 420px;
+  }
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.4s ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.slide a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== DOTS ===== */
+.dots {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.dots button {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.45);
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.dots button.active {
+  background: #ffffff;
+  transform: scale(1.3);
+}
+
+.dots button:hover {
+  background: #ffffff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="hero-slider" id="slider">
+
+  <div class="slide active">
+    <a href="https://www.krishapps.store/webshop#h.xz4aodf1kbs8" target="_top">
+      <img src="https://regi.krishapps.store/images/1img_17proairpmax.jpg" alt="">
+    </a>
+  </div>
+
+  <div class="slide">
+    <a href="https://www.krishapps.store/webshop#h.gnmisuayxjlx" target="_top">
+      <img src="https://regi.krishapps.store/images/zizizimomo.jpg" alt="">
+    </a>
+  </div>
+
+  <div class="slide">
+    <a href="https://www.krishapps.store/webshop#h.4kzbk4dh5zn4" target="_top">
+      <img src="https://regi.krishapps.store/images/kukirin.jpg" alt="">
+    </a>
+  </div>
+
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const dotsContainer = document.getElementById('dots');
+let current = 0;
+const delay = 10000;
+let timer;
+
+/* DOTS */
+slides.forEach((_, i) => {
+  const dot = document.createElement('button');
+  if (i === 0) dot.classList.add('active');
+  dot.addEventListener('click', () => {
+    showSlide(i);
+    resetTimer();
+  });
+  dotsContainer.appendChild(dot);
+});
+
+const dots = dotsContainer.querySelectorAll('button');
+
+function showSlide(index) {
+  slides[current].classList.remove('active');
+  dots[current].classList.remove('active');
+
+  current = index;
+
+  slides[current].classList.add('active');
+  dots[current].classList.add('active');
+}
+
+function nextSlide() {
+  showSlide((current + 1) % slides.length);
+}
+
+function startTimer() {
+  timer = setInterval(nextSlide, delay);
+}
+
+function resetTimer() {
+  clearInterval(timer);
+  startTimer();
+}
+
+startTimer();
+</script>
+
+</body>
+</html>
