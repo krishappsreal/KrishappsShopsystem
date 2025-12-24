@@ -4,43 +4,43 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sites Slider</title>
+<title>Hero Slider</title>
 
 <style>
 html, body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  height: 100%;
   background: transparent;
+  overflow: hidden;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* ===== WRAPPER ===== */
-.sites-slider {
-  width: 100%;
-  max-width: 100%;
-  height: 380px;
+/* ===== HERO SLIDER ===== */
+.hero-slider {
   position: relative;
+  width: 100vw;
+  height: 100vh;
+  max-height: 520px;
+  min-height: 320px;
   overflow: hidden;
-  background: linear-gradient(120deg, #f3caa4, #f7e3c8);
 }
 
-/* ===== MOBIL ===== */
+/* Mobil optimalizálás */
 @media (max-width: 768px) {
-  .sites-slider {
-    height: 260px;
-    background: linear-gradient(180deg, #f7d9b8, #fff1e2);
+  .hero-slider {
+    height: 60vh;
+    min-height: 260px;
+    max-height: 420px;
   }
 }
 
-/* ===== SLIDE ===== */
 .slide {
   position: absolute;
   inset: 0;
   opacity: 0;
   transition: opacity 1.4s ease-in-out;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .slide.active {
@@ -48,52 +48,53 @@ html, body {
   z-index: 1;
 }
 
-/* ===== KATTINTHATÓ TERÜLET ===== */
 .slide a {
+  display: block;
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-/* ===== KÉP ===== */
 .slide img {
-  max-width: 92%;
-  max-height: 90%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* ===== DOTS ===== */
 .dots {
   position: absolute;
-  bottom: 14px;
+  bottom: 18px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 8px;
+  gap: 10px;
   z-index: 10;
 }
 
 .dots button {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   border: none;
-  background: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.45);
   cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
 }
 
 .dots button.active {
-  background: #fff;
+  background: #ffffff;
   transform: scale(1.3);
+}
+
+.dots button:hover {
+  background: #ffffff;
 }
 </style>
 </head>
 
 <body>
 
-<div class="sites-slider" id="slider">
+<div class="hero-slider" id="slider">
 
   <div class="slide active">
     <a href="https://www.krishapps.store/webshop#h.xz4aodf1kbs8" target="_top">
@@ -118,30 +119,48 @@ html, body {
 
 <script>
 const slides = document.querySelectorAll('.slide');
-const dotsWrap = document.getElementById('dots');
+const dotsContainer = document.getElementById('dots');
 let current = 0;
 const delay = 10000;
+let timer;
 
+/* DOTS */
 slides.forEach((_, i) => {
   const dot = document.createElement('button');
   if (i === 0) dot.classList.add('active');
-  dot.onclick = () => showSlide(i);
-  dotsWrap.appendChild(dot);
+  dot.addEventListener('click', () => {
+    showSlide(i);
+    resetTimer();
+  });
+  dotsContainer.appendChild(dot);
 });
 
-const dots = dotsWrap.querySelectorAll('button');
+const dots = dotsContainer.querySelectorAll('button');
 
-function showSlide(i) {
+function showSlide(index) {
   slides[current].classList.remove('active');
   dots[current].classList.remove('active');
-  current = i;
+
+  current = index;
+
   slides[current].classList.add('active');
   dots[current].classList.add('active');
 }
 
-setInterval(() => {
+function nextSlide() {
   showSlide((current + 1) % slides.length);
-}, delay);
+}
+
+function startTimer() {
+  timer = setInterval(nextSlide, delay);
+}
+
+function resetTimer() {
+  clearInterval(timer);
+  startTimer();
+}
+
+startTimer();
 </script>
 
 </body>
