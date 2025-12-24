@@ -4,41 +4,43 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Slider</title>
+<title>Sites Slider</title>
 
 <style>
 html, body {
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
   background: transparent;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* GOOGLE SITES KOMPATIBILIS CONTAINER */
-.slider-wrapper {
+/* ===== WRAPPER ===== */
+.sites-slider {
   width: 100%;
-  aspect-ratio: 16 / 6;
-  min-height: 240px;
-  max-height: 420px;
+  max-width: 100%;
+  height: 380px;
   position: relative;
   overflow: hidden;
+  background: linear-gradient(120deg, #f3caa4, #f7e3c8);
 }
 
-/* Mobil */
+/* ===== MOBIL ===== */
 @media (max-width: 768px) {
-  .slider-wrapper {
-    aspect-ratio: 16 / 9;
-    min-height: 220px;
+  .sites-slider {
+    height: 260px;
+    background: linear-gradient(180deg, #f7d9b8, #fff1e2);
   }
 }
 
+/* ===== SLIDE ===== */
 .slide {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1.3s ease-in-out;
+  transition: opacity 1.4s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .slide.active {
@@ -46,19 +48,23 @@ html, body {
   z-index: 1;
 }
 
+/* ===== KATTINTHATÓ TERÜLET ===== */
 .slide a {
-  display: block;
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* ===== KÉP ===== */
 .slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 92%;
+  max-height: 90%;
+  object-fit: contain;
 }
 
-/* DOTS */
+/* ===== DOTS ===== */
 .dots {
   position: absolute;
   bottom: 14px;
@@ -70,8 +76,8 @@ html, body {
 }
 
 .dots button {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   border: none;
   background: rgba(255,255,255,0.5);
@@ -87,23 +93,23 @@ html, body {
 
 <body>
 
-<div class="slider-wrapper" id="slider">
+<div class="sites-slider" id="slider">
 
   <div class="slide active">
     <a href="https://www.krishapps.store/webshop#h.xz4aodf1kbs8" target="_top">
-      <img src="https://regi.krishapps.store/images/1img_17proairpmax.jpg">
+      <img src="https://regi.krishapps.store/images/1img_17proairpmax.jpg" alt="">
     </a>
   </div>
 
   <div class="slide">
     <a href="https://www.krishapps.store/webshop#h.gnmisuayxjlx" target="_top">
-      <img src="https://regi.krishapps.store/images/zizizimomo.jpg">
+      <img src="https://regi.krishapps.store/images/zizizimomo.jpg" alt="">
     </a>
   </div>
 
   <div class="slide">
     <a href="https://www.krishapps.store/webshop#h.4kzbk4dh5zn4" target="_top">
-      <img src="https://regi.krishapps.store/images/kukirin.jpg">
+      <img src="https://regi.krishapps.store/images/kukirin.jpg" alt="">
     </a>
   </div>
 
@@ -117,10 +123,10 @@ let current = 0;
 const delay = 10000;
 
 slides.forEach((_, i) => {
-  const d = document.createElement('button');
-  if (i === 0) d.classList.add('active');
-  d.onclick = () => showSlide(i);
-  dotsWrap.appendChild(d);
+  const dot = document.createElement('button');
+  if (i === 0) dot.classList.add('active');
+  dot.onclick = () => showSlide(i);
+  dotsWrap.appendChild(dot);
 });
 
 const dots = dotsWrap.querySelectorAll('button');
