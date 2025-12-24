@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fullscreen Hero Slider</title>
+<title>Responsive Hero Slider</title>
 
 <style>
 html, body {
@@ -49,9 +49,9 @@ html, body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
-  transform: scale(1.05);
-  transition: transform 6s ease;
+  object-position: center center;
+  transform: scale(1.06);
+  transition: transform 7s ease;
 }
 
 .slide.active img {
@@ -75,17 +75,17 @@ html, body {
 /* ===== DOTS ===== */
 .dots {
   position: absolute;
-  bottom: 28px;
+  bottom: 32px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 10px;
+  gap: 12px;
   z-index: 5;
 }
 
 .dots button {
-  width: 11px;
-  height: 11px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   border: none;
   background: rgba(255,255,255,0.45);
@@ -98,14 +98,51 @@ html, body {
   transform: scale(1.35);
 }
 
-/* ===== MOBIL ===== */
-@media (max-width: 768px) {
+/* ================================================= */
+/* ================= TABLET ======================== */
+/* ================================================= */
+@media (max-width: 1024px) {
   .slide img {
     object-position: center top;
+    transform: scale(1.04);
+  }
+
+  .dots {
+    bottom: 24px;
+  }
+}
+
+/* ================================================= */
+/* ================= MOBILE ======================== */
+/* ================================================= */
+@media (max-width: 768px) {
+  .hero {
+    height: 92vh; /* ne legyen túl magas */
+  }
+
+  .slide img {
+    object-position: center top;
+    transform: scale(1.02);
+  }
+
+  .overlay {
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.25),
+        rgba(0,0,0,0.1),
+        rgba(0,0,0,0.5)
+      );
   }
 
   .dots {
     bottom: 18px;
+    gap: 10px;
+  }
+
+  .dots button {
+    width: 10px;
+    height: 10px;
   }
 }
 </style>
