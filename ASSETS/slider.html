@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Hero Slider</title>
+<title>Fullscreen Hero Slider</title>
 
 <style>
 html, body {
@@ -12,35 +12,24 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  background: transparent;
   overflow: hidden;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* ===== HERO SLIDER ===== */
-.hero-slider {
+/* ===== HERO ===== */
+.hero {
   position: relative;
   width: 100vw;
   height: 100vh;
-  max-height: 520px;
-  min-height: 320px;
   overflow: hidden;
 }
 
-/* Mobil optimalizálás */
-@media (max-width: 768px) {
-  .hero-slider {
-    height: 60vh;
-    min-height: 260px;
-    max-height: 420px;
-  }
-}
-
+/* ===== SLIDE ===== */
 .slide {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1.4s ease-in-out;
+  transition: opacity 1.6s ease-in-out;
 }
 
 .slide.active {
@@ -48,32 +37,55 @@ html, body {
   z-index: 1;
 }
 
+/* ===== KATTINTHATÓ ===== */
 .slide a {
   display: block;
   width: 100%;
   height: 100%;
 }
 
+/* ===== KÉP ===== */
 .slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  transform: scale(1.05);
+  transition: transform 6s ease;
+}
+
+.slide.active img {
+  transform: scale(1);
+}
+
+/* ===== OVERLAY ===== */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.35),
+      rgba(0,0,0,0.15),
+      rgba(0,0,0,0.55)
+    );
+  z-index: 2;
 }
 
 /* ===== DOTS ===== */
 .dots {
   position: absolute;
-  bottom: 18px;
+  bottom: 28px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   gap: 10px;
-  z-index: 10;
+  z-index: 5;
 }
 
 .dots button {
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
   border: none;
   background: rgba(255,255,255,0.45);
@@ -82,44 +94,52 @@ html, body {
 }
 
 .dots button.active {
-  background: #ffffff;
-  transform: scale(1.3);
+  background: #fff;
+  transform: scale(1.35);
 }
 
-.dots button:hover {
-  background: #ffffff;
+/* ===== MOBIL ===== */
+@media (max-width: 768px) {
+  .slide img {
+    object-position: center top;
+  }
+
+  .dots {
+    bottom: 18px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="hero-slider" id="slider">
+<div class="hero" id="hero">
 
   <div class="slide active">
-    <a href="https://www.krishapps.store/webshop#h.xz4aodf1kbs8" target="_top">
+    <a href="https://www.krishapps.store/webshop#h.xz4aodf1kbs8">
       <img src="https://regi.krishapps.store/images/1img_17proairpmax.jpg" alt="">
     </a>
   </div>
 
   <div class="slide">
-    <a href="https://www.krishapps.store/webshop#h.gnmisuayxjlx" target="_top">
+    <a href="https://www.krishapps.store/webshop#h.gnmisuayxjlx">
       <img src="https://regi.krishapps.store/images/zizizimomo.jpg" alt="">
     </a>
   </div>
 
   <div class="slide">
-    <a href="https://www.krishapps.store/webshop#h.4kzbk4dh5zn4" target="_top">
+    <a href="https://www.krishapps.store/webshop#h.4kzbk4dh5zn4">
       <img src="https://regi.krishapps.store/images/kukirin.jpg" alt="">
     </a>
   </div>
 
+  <div class="overlay"></div>
   <div class="dots" id="dots"></div>
 </div>
 
 <script>
 const slides = document.querySelectorAll('.slide');
-const dotsContainer = document.getElementById('dots');
+const dotsWrap = document.getElementById('dots');
 let current = 0;
 const delay = 10000;
 let timer;
@@ -128,21 +148,19 @@ let timer;
 slides.forEach((_, i) => {
   const dot = document.createElement('button');
   if (i === 0) dot.classList.add('active');
-  dot.addEventListener('click', () => {
+  dot.onclick = () => {
     showSlide(i);
     resetTimer();
-  });
-  dotsContainer.appendChild(dot);
+  };
+  dotsWrap.appendChild(dot);
 });
 
-const dots = dotsContainer.querySelectorAll('button');
+const dots = dotsWrap.querySelectorAll('button');
 
-function showSlide(index) {
+function showSlide(i) {
   slides[current].classList.remove('active');
   dots[current].classList.remove('active');
-
-  current = index;
-
+  current = i;
   slides[current].classList.add('active');
   dots[current].classList.add('active');
 }
