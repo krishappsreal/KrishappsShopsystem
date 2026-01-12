@@ -101,8 +101,8 @@
                 {
                     image: 'https://fimgs.net/photogram/p1200/pd/pz/1Xs2W7IDaRIobaAP.jpg',
                     brand: 'Dior',
-                    name: 'Homme Intense 100ml',
-                    type: 'Eau de Parfum Intense',
+                    name: 'Homme Intense 100ml, 2011',
+                    type: 'Eau de Parfum Intense (Ritka)',
                     price: '96,700 Ft'
                 },
                 {
