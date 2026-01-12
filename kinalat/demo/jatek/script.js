@@ -101,9 +101,9 @@
                 {
                     image: 'https://fimgs.net/photogram/p1200/pd/pz/1Xs2W7IDaRIobaAP.jpg',
                     brand: 'Dior',
-                    name: 'Homme Intense 50ml',
+                    name: 'Homme Intense 100ml',
                     type: 'Eau de Parfum Intense',
-                    price: '45,000 Ft'
+                    price: '96,700 Ft'
                 },
                 {
                     image: 'https://fimgs.net/photogram/p1200/u7/90/8H5J4MwH6VtSaZiY.jpg',
