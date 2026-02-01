@@ -110,7 +110,7 @@
                     brand: 'Dior',
                     name: 'Homme Sport 125ml',
                     type: 'Eau de Toilette',
-                    price: '99,990 Ft'
+                    price: '50,560 Ft'
                 },
                 {
                     image: 'https://fimgs.net/photogram/p1200/u7/90/8H5J4MwH6VtSaZiY.jpg',
