@@ -106,6 +106,13 @@
                     price: '96,700 Ft'
                 },
                 {
+                    image: 'https://i.pinimg.com/736x/ee/fc/60/eefc601ddae7346c3a82938ed3336496.jpg',
+                    brand: 'Dior',
+                    name: 'Homme Sport 125ml',
+                    type: 'Eau de Toilette',
+                    price: '99,990 Ft'
+                },
+                {
                     image: 'https://fimgs.net/photogram/p1200/u7/90/8H5J4MwH6VtSaZiY.jpg',
                     brand: 'Valentino',
                     name: 'Born In Roma Intense 100ml',
