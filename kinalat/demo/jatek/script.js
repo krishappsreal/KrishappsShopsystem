@@ -120,6 +120,20 @@
                     price: '56,990 Ft'
                 },
                 {
+                    image: 'https://fimgs.net/photogram/p1200/5m/u1/4RBYM6g0JW8aGWw6.jpg',
+                    brand: 'Mancera',
+                    name: 'Red Tobacco 120ml',
+                    type: 'Eau de Parfum',
+                    price: '50,370 Ft'
+                },
+                {
+                    image: 'https://fimgs.net/photogram/p1200/r3/va/8dqXKmoSRHGvGc91.jpg',
+                    brand: 'Mancera',
+                    name: 'Cedrat Boise 120ml',
+                    type: 'Eau de Parfum',
+                    price: '48,750 Ft'
+                },
+                {
                     image: 'https://fimgs.net/photogram/p1200/4z/k5/1a0fubcsWmL2FPL5.jpg',
                     brand: 'Gisada',
                     name: 'Ambassador 100ml',
